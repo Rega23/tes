@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Invitation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top, #1a1a1a, #0f0f0f);
+      color: #f5f5f5;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 1px;
+    }
+
+    .cover {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #111, #1c1c1c);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .cover h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .open-btn {
+      margin-top: 20px;
+      padding: 12px 28px;
+      border-radius: 50px;
+      background: linear-gradient(45deg, gold, #ffd700);
+      color: black;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 20px rgba(255,215,0,0.4);
+    }
+
+    .open-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255,215,0,0.7);
+    }
+
+    .container {
+      padding: 40px 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, gold, transparent);
+      margin: 20px auto;
+    }
+
+    .card {
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease;
+    }
+
+    .show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .time-box {
+      background: rgba(255,255,255,0.08);
+      padding: 12px;
+      border-radius: 12px;
+      min-width: 60px;
+      box-shadow: inset 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .time-box span {
+      font-size: 18px;
+      font-weight: bold;
+      color: gold;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.4s;
+      filter: brightness(0.9);
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 12px;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      background: linear-gradient(45deg, gold, #ffd700);
+      color: black;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+      box-shadow: 0 0 15px rgba(255,215,0,0.5);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(255,215,0,0.8);
+    }
+
+    footer {
+      margin-top: 40px;
+      color: #aaa;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    audio { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Cover Screen -->
+  <div class="cover" id="cover">
+    <h1>Wedding Invitation</h1>
+    <p id="guestName">Tamu Undangan</p>
+    <button class="open-btn" onclick="openInvitation()">Open Invitation</button>
+  </div>
+
+  <!-- Music -->
+  <!-- Music (Online Source) -->
+  <audio id="music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+    <h1>THE WEDDING OF</h1>
+    <h2>Nama Wanita & Nama Pria</h2>
+
+    <div class="divider"></div>
+
+    <div class="card">
+      <h2>Countdown</h2>
+      <div class="countdown">
+        <div class="time-box"><span id="days">0</span><br>Hari</div>
+        <div class="time-box"><span id="hours">0</span><br>Jam</div>
+        <div class="time-box"><span id="minutes">0</span><br>Menit</div>
+        <div class="time-box"><span id="seconds">0</span><br>Detik</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Gallery</h2>
+      <div class="gallery">
+        <img src="foto1.jpg">
+        <img src="foto2.jpg">
+        <img src="foto3.jpg">
+        <img src="foto4.jpg">
+      </div>
+    </div>
+
+    <a href="https://www.google.com/maps?q=LOKASI_ANDA" target="_blank" class="btn">Lihat Lokasi</a>
+
+    <footer>
+      <p>Terima kasih atas doa dan restu Anda</p>
+    </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="">
+  </div>
+  </div>
+
+  <script>
+    // Ambil nama tamu dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const guest = urlParams.get('to');
+    if (guest) {
+      document.getElementById('guestName').innerText = guest;
+    }
+
+    function openInvitation() {
+      const music = document.getElementById('music');
+      const playPromise = music.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          console.log('Music started');
+        }).catch(() => {
+          console.log('Autoplay blocked, retrying...');
+        });
+      }
+      document.getElementById('cover').style.display = 'none';
+      // play handled above
+    }
+
+    // Animation
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    });
+    document.querySelectorAll('.card, footer').forEach(el => observer.observe(el));
+
+    // Countdown
+    const weddingDate = new Date("2026-12-31T00:00:00").getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const d = weddingDate - now;
+      document.getElementById('days').innerText = Math.floor(d / (1000*60*60*24));
+      document.getElementById('hours').innerText = Math.floor((d%(1000*60*60*24))/(1000*60*60));
+      document.getElementById('minutes').innerText = Math.floor((d%(1000*60*60))/(1000*60));
+      document.getElementById('seconds').innerText = Math.floor((d%(1000*60))/1000);
+    }, 1000);
+  // Lightbox
+    function openLightbox(src) {
+      document.getElementById('lightbox').style.display = 'flex';
+      document.getElementById('lightbox-img').src = src;
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').style.display = 'none';
+    }
+
+    // Add click event to gallery images
+    document.querySelectorAll('.gallery img').forEach(img => {
+      img.addEventListener('click', () => openLightbox(img.src));
+    });
+
+  </script>
+
+</body>
+</html>
