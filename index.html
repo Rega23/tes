@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wedding Invitation</title>
+  <title>Undangan Acara Lamaran</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600&display=swap');
 
@@ -241,7 +241,7 @@
   <script>
     // Ambil nama tamu dari URL
     const urlParams = new URLSearchParams(window.location.search);
-    const guest = urlParams.get('kpd');
+    const guest = urlParams.get('to');
     if (guest) {
       document.getElementById('guestName').innerText = guest;
     }
