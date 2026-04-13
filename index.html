@@ -189,7 +189,7 @@
 
   <!-- Cover Screen -->
   <div class="cover" id="cover">
-    <h1>Wedding Invitation</h1>
+    <h1>Acara Lamaran</h1>
     <p id="guestName">Tamu Undangan</p>
     <button class="open-btn" onclick="openInvitation()">Open Invitation</button>
   </div>
@@ -201,8 +201,8 @@
   </audio>
 
   <div class="container">
-    <h1>THE WEDDING OF</h1>
-    <h2>Nama Wanita & Nama Pria</h2>
+    <h1>Lamaran</h1>
+    <h2>Alya & Mulyana</h2>
 
     <div class="divider"></div>
 
@@ -219,10 +219,10 @@
     <div class="card">
       <h2>Gallery</h2>
       <div class="gallery">
-        <img src="foto1.jpg">
-        <img src="foto2.jpg">
-        <img src="foto3.jpg">
-        <img src="foto4.jpg">
+        <img src="IMG-20260412-WA0002.jpg">
+        <img src="IMG-20260412-WA0003.jpg">
+        <img src="IMG-20260412-WA0004.jpg">
+        <img src="IMG-20260412-WA0005.jpg">
       </div>
     </div>
 
@@ -241,7 +241,7 @@
   <script>
     // Ambil nama tamu dari URL
     const urlParams = new URLSearchParams(window.location.search);
-    const guest = urlParams.get('to');
+    const guest = urlParams.get('kpd');
     if (guest) {
       document.getElementById('guestName').innerText = guest;
     }
