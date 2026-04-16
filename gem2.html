@@ -137,6 +137,40 @@
         .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid var(--envelope-color); border-radius: 8px; background: var(--bg-color); }
         .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent-color); background: white; }
 
+        /* --- Gaya untuk Kartu Pesan Tamu --- */
+        .message-card {
+    background: var(--white);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--accent-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-right: 1px solid #eee;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+.message-card h5 {
+    color: var(--primary-color);
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.message-card small {
+    color: #999;
+    font-size: 0.75rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+.message-card p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+/* Custom Scrollbar agar lebih cantik */
+#messages-list::-webkit-scrollbar { width: 6px; }
+#messages-list::-webkit-scrollbar-track { background: transparent; }
+#messages-list::-webkit-scrollbar-thumb { background: var(--envelope-bg); border-radius: 10px; }
         /* --- Musik Latar --- */
         #music-btn { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--primary-color); color: white; border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; z-index: 3000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid var(--accent-color); }
         .spin { animation: rotate 3s linear infinite; }
@@ -384,6 +418,76 @@
        // --- LOGIKA FORM BUKU TAMU TERKONEKSI GOOGLE SHEETS ---
         document.getElementById('guestbook-form').addEventListener('submit', function(e) {
         e.preventDefault();
+            // --- LOGIKA MENGAMBIL PESAN DARI GOOGLE SHEETS ---
+// Ganti dengan URL script Anda yang sama dengan URL form submit
+const scriptURLGet = 'https://script.google.com/macros/s/AKfycbzwEq7Kc818tMBK_fCVz5GDjXV0r25nh01OgstluGYdxIaddV1oHrR4kr_uuiuVuMX-/exec';
+
+function loadMessages() {
+    const list = document.getElementById('messages-list');
+    const count = document.getElementById('msg-count');
+
+    fetch(scriptURLGet)
+        .then(response => response.json())
+        .then(data => {
+            list.innerHTML = ''; // Kosongkan teks "Memuat..."
+            
+            // Cek jika belum ada data (kecuali baris header)
+            if(data.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #888;">Belum ada pesan. Jadilah yang pertama!</p>';
+                return;
+            }
+
+            count.innerText = data.length;
+
+            // Balik urutan array agar pesan terbaru muncul paling atas
+            data.reverse().forEach(row => {
+                // Pastikan kolom nama dan pesan tidak kosong
+                if(!row.nama || !row.pesan) return;
+
+                const card = document.createElement('div');
+                card.className = 'message-card';
+                // Jika kamu menambahkan kolom 'waktu' di spreadsheet, ganti teks statis di bawah
+                card.innerHTML = `
+                    <h5>${row.nama}</h5>
+                    <small>${row.waktu || 'Baru saja'}</small> 
+                    <p>${row.pesan}</p>
+                `;
+                list.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            list.innerHTML = '<p style="text-align: center; color: var(--heart-red);">Gagal memuat pesan. Silakan muat ulang halaman.</p>';
+        });
+}
+
+// UPDATE fungsi openEnvelope() kamu untuk memanggil loadMessages
+// Cari fungsi openEnvelope() di kodemu dan tambahkan loadMessages() di dalamnya:
+function openEnvelope() {
+    document.getElementById('envelope').classList.add('open');
+    document.getElementById('guest-info').style.opacity = '0';
+    document.getElementById('open-button').style.opacity = '0';
+    
+    const music = document.getElementById('bg-music');
+    music.play().catch(e => console.log("Audio block oleh browser"));
+    
+    setTimeout(() => {
+        document.getElementById('envelope-wrapper').classList.add('hidden');
+        document.getElementById('main-content').classList.add('visible');
+        document.body.style.overflow = 'auto'; 
+        document.getElementById('music-btn').style.display = 'flex';
+        document.getElementById('leaves-container').style.display = 'block';
+        setInterval(createLeaf, 350);
+        
+        // PANGGIL FUNGSI INI SAAT HALAMAN UTAMA TERBUKA
+        loadMessages(); 
+
+    }, 2500); 
+}
+
+// UPDATE LOGIKA SUBMIT AGAR DAFTAR PESAN LANGSUNG TER-UPDATE:
+// Di dalam .then() pada blok fetch(scriptURL, { method: 'POST' ... }) tambahkan:
+// loadMessages(); // Refresh daftar pesan setelah berhasil submit
     
     // Mengubah teks tombol agar tamu tahu sedang proses loading
         const btn = this.querySelector('button[type="submit"]');
