@@ -373,12 +373,42 @@
             else { m.pause(); this.classList.remove('spin'); this.style.opacity = '0.5'; }
         };
 
-        // --- LOGIKA FORM BUKU TAMU ---
+       // --- LOGIKA FORM BUKU TAMU TERKONEKSI GOOGLE SHEETS ---
         document.getElementById('guestbook-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert(`Terima kasih! Ucapan Anda telah kami terima.`);
-            this.reset();
-        });
+        e.preventDefault();
+    
+    // Mengubah teks tombol agar tamu tahu sedang proses loading
+        const btn = this.querySelector('button[type="submit"]');
+        const originalText = btn.innerText;
+        btn.innerText = "Mengirim...";
+        btn.disabled = true;
+
+    // Mengambil data dari form
+        const nama = document.getElementById('name').value;
+        const pesan = document.getElementById('message').value;
+
+    // Ganti URL di bawah dengan URL dari Google Apps Script Anda!
+        const scriptURL = 'PASTE_URL_APPS_SCRIPT_ANDA_DI_SINI';
+
+    fetch(scriptURL, {
+        method: 'POST',
+        // Menggunakan text/plain agar tidak diblokir oleh sistem keamanan browser (CORS)
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ nama: nama, pesan: pesan })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(`Terima kasih ${nama}! Doa restu Anda telah kami terima.`);
+        this.reset(); // Kosongkan form setelah sukses
+        btn.innerText = originalText;
+        btn.disabled = false;
+    })
+    .catch(error => {
+        alert('Maaf, terjadi kesalahan koneksi. Silakan coba lagi.');
+        btn.innerText = originalText;
+        btn.disabled = false;
+    });
+});
     </script>
 </body>
 </html>
