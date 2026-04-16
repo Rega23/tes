@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
+        /* --- TEMA WARNA: DUSTY ROSE & KRAFT PAPER --- */
         :root {
             --primary-color: #A67C7C; --bg-color: #FFF9F9; --text-color: #4A4A4A;
             --accent-color: #C5A059; --envelope-bg: #D49068; --envelope-dark: #B57450;
@@ -24,29 +25,31 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
         body { background-color: var(--bg-color); color: var(--text-color); overflow: hidden; text-align: center; scroll-behavior: smooth; }
 
-        /* Animasi Daun */
+        /* --- EFEK DAUN --- */
         #leaves-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; display: none; }
         .leaf { position: absolute; width: 15px; height: 15px; background-color: var(--primary-color); opacity: 0.4; border-radius: 0 50% 50% 50%; transform: rotate(45deg); animation: fall linear infinite; }
         @keyframes fall { 0% { top: -10%; transform: rotate(0deg); } 100% { top: 110%; transform: rotate(360deg); } }
 
-        /* Tampilan Amplop 3D (Kraft Style) */
+        /* --- AMPLOP & NAMA TAMU --- */
         .envelope-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(50,50,50,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; transition: opacity 0.8s; }
         .envelope-wrapper.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         
-        .guest-info { margin-bottom: 2rem; color: var(--white); transition: opacity 0.5s; }
-        .guest-info h4 { font-family: var(--font-accent); color: var(--stitch-color); font-size: 2.8rem; font-weight: normal; }
+        .guest-info { margin-bottom: 2rem; color: var(--white); transition: opacity 0.5s; padding: 0 1rem; }
+        .guest-info p { font-weight: 300; letter-spacing: 1px; margin-bottom: 0.5rem; opacity: 0.9; }
+        .guest-info h4 { font-family: var(--font-accent); color: var(--stitch-color); font-size: 2.8rem; font-weight: normal; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
         
         .envelope-container { perspective: 1000px; }
-        .envelope { position: relative; width: 300px; height: 200px; transform-style: preserve-3d; cursor: pointer; }
+        .envelope { position: relative; width: 320px; height: 210px; transform-style: preserve-3d; cursor: pointer; }
         .envelope-back { position: absolute; width: 100%; height: 100%; background: var(--envelope-dark); border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         
         .letter { position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px; background: white; border-radius: 5px; display: flex; flex-direction: column; justify-content: center; z-index: 1; transition: 0.8s 0.3s; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .letter h3 { font-family: var(--font-accent); color: var(--primary-color); font-size: 2rem; }
+        .letter h3 { font-family: var(--font-accent); color: var(--primary-color); font-size: 2.2rem; font-weight: normal; margin-bottom: 5px; }
+        .letter p { font-size: 0.8rem; color: #666; font-weight: 300; }
 
-        .envelope-front { position: absolute; top: 40px; width: 100%; height: 160px; background: var(--envelope-bg); border-radius: 0 0 10px 10px; z-index: 2; border: 3px dashed var(--stitch-color); border-top: none; }
-        .lid { position: absolute; top: 0; width: 100%; height: 120px; background: var(--envelope-bg); border-radius: 10px 10px 50% 50%; z-index: 3; transform-origin: top; transition: 0.8s; border: 3px dashed var(--stitch-color); border-top: none; }
+        .envelope-front { position: absolute; top: 40px; width: 100%; height: 170px; background: var(--envelope-bg); border-radius: 0 0 10px 10px; z-index: 2; border: 3px dashed var(--stitch-color); border-top: none; }
+        .lid { position: absolute; top: 0; width: 100%; height: 130px; background: var(--envelope-bg); border-radius: 10px 10px 50% 50%; z-index: 3; transform-origin: top; transition: 0.8s; border: 3px dashed var(--stitch-color); border-top: none; }
         
-        .heart-seal { position: absolute; top: 110px; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; z-index: 4; transition: 0.3s; }
+        .heart-seal { position: absolute; top: 120px; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; z-index: 4; transition: 0.3s; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)); }
         .heart-seal::before, .heart-seal::after { content: ""; position: absolute; width: 25px; height: 40px; background: var(--heart-red); border-radius: 25px 25px 0 0; }
         .heart-seal::before { left: 25px; transform: rotate(-45deg); transform-origin: 0 100%; }
         .heart-seal::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
@@ -56,42 +59,80 @@
         .envelope.open .letter { transform: translateY(-100px); }
         .envelope.open .heart-seal { opacity: 0; transform: translate(-50%, -50%) scale(0); }
 
-        /* Konten Utama */
-        .container { max-width: 800px; margin: 0 auto; background: var(--white); min-height: 100vh; display: none; opacity: 0; transition: 1s; padding-bottom: 50px; }
+        /* --- KONTEN UTAMA --- */
+        .container { max-width: 800px; margin: 0 auto; background: var(--white); min-height: 100vh; display: none; opacity: 0; transition: 1s; padding-bottom: 50px; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
         .container.visible { display: block; opacity: 1; }
         section { padding: 4rem 2rem; border-bottom: 1px dashed var(--accent-color); }
         
-        h1 { font-family: var(--font-accent); font-size: 4.5rem; color: var(--primary-color); font-weight: normal; }
-        h2 { letter-spacing: 3px; color: var(--accent-color); text-transform: uppercase; font-size: 1rem; margin-bottom: 10px; }
+        h1 { font-family: var(--font-accent); font-size: 4.5rem; color: var(--primary-color); font-weight: normal; margin-bottom: 0.5rem; }
+        h2 { letter-spacing: 3px; color: var(--accent-color); text-transform: uppercase; font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 300; }
+        h3.section-title { font-family: var(--font-accent); color: var(--primary-color); font-size: 3rem; font-weight: normal; margin-bottom: 2rem; position: relative; display: inline-block; }
+        h3.section-title::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 60px; height: 2px; background-color: var(--accent-color); }
+
+        .btn-action { background: var(--accent-color); color: white; padding: 12px 28px; border-radius: 30px; text-decoration: none; border: none; font-weight: 600; cursor: pointer; margin-top: 10px; display: inline-block; transition: 0.3s; box-shadow: 0 4px 10px rgba(197, 160, 89, 0.3); }
+        .btn-action:hover { background: var(--primary-color); transform: translateY(-2px); }
+
+        /* --- KUTIPAN --- */
+        .quote-section { background: var(--bg-color); font-style: italic; font-size: 1.1rem; line-height: 1.8; color: var(--text-color); }
         
-        /* Timeline */
-        .timeline { position: relative; max-width: 600px; margin: 2rem auto; text-align: left; padding-left: 30px; border-left: 2px solid var(--accent-color); }
-        .timeline-item { position: relative; margin-bottom: 2rem; padding-left: 20px; }
-        .timeline-item::before { content: ''; position: absolute; left: -39px; top: 5px; width: 15px; height: 15px; background: var(--primary-color); border-radius: 50%; border: 3px solid white; }
+        /* --- PROFIL PASANGAN (YANG SEMPAT HILANG) --- */
+        .couple-profile { display: flex; justify-content: center; align-items: center; gap: 3rem; }
+        .profile-card { text-align: center; }
+        .profile-frame { position: relative; width: 170px; height: 170px; margin: 0 auto 1.5rem auto; display: flex; justify-content: center; align-items: center; }
+        .profile-frame::before { content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--accent-color); border-top-color: transparent; border-bottom-color: transparent; animation: spinFrame 10s linear infinite; }
+        .profile-img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 5px solid var(--white); box-shadow: 0 5px 15px rgba(166, 124, 124, 0.2); position: relative; z-index: 1; }
+        @keyframes spinFrame { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .profile-card h3 { color: var(--primary-color); font-family: var(--font-accent); font-size: 2.8rem; font-weight: normal; margin-bottom: 0.5rem;}
+        .ampersand { font-family: var(--font-accent); font-size: 4rem; color: var(--accent-color); font-weight: normal; margin-top: -30px; }
 
-        /* Galeri */
-        .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 1rem; }
-        .gallery-item img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; cursor: pointer; }
-        #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 5000; display: none; justify-content: center; align-items: center; }
-        #lightbox img { max-width: 90%; max-height: 80%; border-radius: 8px; }
+        /* --- HITUNG MUNDUR --- */
+        .timer { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+        .time-box { background: var(--primary-color); color: white; padding: 0.8rem; border-radius: 8px; min-width: 75px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-bottom: 3px solid var(--accent-color); }
+        .time-box span { display: block; font-size: 1.8rem; font-weight: 600; }
+        .time-box small { font-size: 0.7rem; text-transform: uppercase; opacity: 0.9; }
 
-        /* Timer */
-        .timer { display: flex; justify-content: center; gap: 10px; margin: 1.5rem 0; }
-        .time-box { background: var(--primary-color); color: white; padding: 10px; border-radius: 8px; min-width: 70px; }
-        .time-box span { display: block; font-size: 1.5rem; font-weight: 600; }
+        /* --- TIMELINE --- */
+        .timeline { position: relative; max-width: 600px; margin: 0 auto; text-align: left; padding-left: 20px; }
+        .timeline::before { content: ''; position: absolute; top: 0; left: 10px; width: 2px; height: 100%; background: var(--accent-color); }
+        .timeline-item { position: relative; margin-bottom: 2rem; padding-left: 30px; }
+        .timeline-item::before { content: ''; position: absolute; top: 5px; left: -14px; width: 15px; height: 15px; border-radius: 50%; background: var(--primary-color); border: 2px solid var(--white); box-shadow: 0 0 0 2px var(--accent-color); }
+        .timeline-item h4 { font-weight: 600; color: #333; margin-bottom: 5px; }
 
-        /* Form & List Pesan */
+        /* --- GALERI --- */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 1rem; }
+        .gallery-item { height: 200px; overflow: hidden; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: 0.3s; }
+        .gallery-item:hover { border-color: var(--accent-color); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .gallery-item:hover img { transform: scale(1.1); }
+        #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 5000; display: none; justify-content: center; align-items: center; cursor: zoom-out; }
+        #lightbox img { max-width: 90%; max-height: 80%; border: 4px solid var(--accent-color); border-radius: 4px; }
+
+        /* --- BUKU TAMU --- */
         .form-group { text-align: left; margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--primary-color); }
-        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--primary-color); font-size: 0.9rem; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent-color); }
         
-        .message-card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary-color); box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: left; }
-        
-        #music-btn { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--primary-color); border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; z-index: 3000; color: white; }
+        .message-card { background: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary-color); box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: left; }
+        .message-card h4 { color: var(--primary-color); margin-bottom: 5px; font-weight: 600; font-size: 1.1rem; }
+        .message-card p { font-size: 0.9rem; font-weight: 300; color: #555; line-height: 1.5; font-style: italic; }
+        .message-card small { font-size: 0.75rem; color: #999; display: block; margin-top: 8px; }
+
+        #music-btn { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--primary-color); border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; z-index: 3000; color: white; border: 2px solid var(--accent-color); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .spin { animation: rotate 3s linear infinite; }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        
-        .btn-action { background: var(--accent-color); color: white; padding: 12px 25px; border-radius: 30px; text-decoration: none; border: none; font-weight: 600; cursor: pointer; margin-top: 10px; display: inline-block; }
+
+        @media (max-width: 600px) { 
+            h1 { font-size: 3.2rem; } 
+            h3.section-title { font-size: 2.3rem; }
+            .couple-profile { flex-direction: column; gap: 1rem; } 
+            .ampersand { transform: rotate(90deg); margin: 0.5rem 0; font-size: 3rem; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); } 
+            .guest-info h4 { font-size: 2.2rem; }
+            .envelope { width: 280px; height: 185px; } 
+            .heart-seal { top: 105px; }
+            .envelope.open .letter { transform: translateY(-80px); }
+        }
     </style>
 </head>
 <body>
@@ -112,89 +153,127 @@
         <div class="envelope-container">
             <div class="envelope" id="envelope">
                 <div class="envelope-back"></div>
-                <div class="letter"><h3>Romeo & Juliet</h3><p>Engagement Invite</p></div>
+                <div class="letter">
+                    <h3>Romeo & Juliet</h3>
+                    <p>Engagement Invite</p>
+                </div>
                 <div class="envelope-front"></div>
                 <div class="lid"></div>
                 <div class="heart-seal"></div>
             </div>
         </div>
-        <button class="btn-action" id="open-button" style="margin-top: 2rem;">Buka Undangan</button>
+        <button class="btn-action" id="open-button" style="margin-top: 3rem; background: var(--heart-red);">Buka Undangan</button>
     </div>
 
     <div class="container" id="main-content">
+        
         <section>
             <h2>The Engagement Of</h2>
             <h1>Romeo & Juliet</h1>
-            <p>Minggu, 20 Desember 2026</p>
+            <p style="font-weight: 300; letter-spacing: 1px;">Minggu, 20 Desember 2026</p>
         </section>
 
         <section class="quote-section">
-            <p style="font-style: italic;">"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya."</p>
-            <span style="font-weight: 600; display: block; margin-top: 10px;">(QS. Ar-Rum: 21)</span>
+            "Satu langkah lebih dekat untuk memulai lembaran baru. Kami memohon doa dan restu keluarga serta sahabat untuk momen pertunangan kami."
+            <span style="display: block; margin-top: 10px; font-weight: 600; color: var(--primary-color);">Romeo & Juliet</span>
+        </section>
+
+        <section class="couple-profile">
+            <div class="profile-card">
+                <div class="profile-frame"><img src="https://picsum.photos/400/400?random=1" class="profile-img" alt="Foto Romeo"></div>
+                <h3>Romeo</h3>
+                <p style="font-weight: 300; font-size: 0.9rem;">Putra dari Bapak Fulan & Ibu Fulanah</p>
+            </div>
+            <span class="ampersand">&</span>
+            <div class="profile-card">
+                <div class="profile-frame"><img src="https://picsum.photos/400/400?random=2" class="profile-img" alt="Foto Juliet"></div>
+                <h3>Juliet</h3>
+                <p style="font-weight: 300; font-size: 0.9rem;">Putri dari Bapak Fulan & Ibu Fulanah</p>
+            </div>
         </section>
 
         <section id="countdown">
-            <h3 style="font-family: var(--font-accent); color: var(--primary-color); font-size: 2.5rem;">Menuju Hari Bahagia</h3>
+            <h3 class="section-title">Menuju Hari Bahagia</h3>
             <div class="timer">
                 <div class="time-box"><span id="days">00</span><small>Hari</small></div>
                 <div class="time-box"><span id="hours">00</span><small>Jam</small></div>
                 <div class="time-box"><span id="minutes">00</span><small>Menit</small></div>
                 <div class="time-box"><span id="seconds">00</span><small>Detik</small></div>
             </div>
+            <a href="#" class="btn-action">📅 Simpan ke Kalender</a>
         </section>
 
         <section>
-            <h3 style="font-family: var(--font-accent); color: var(--primary-color); font-size: 2.5rem;">Kisah Cinta</h3>
+            <h3 class="section-title">Kisah Cinta Kami</h3>
             <div class="timeline">
                 <div class="timeline-item">
-                    <h4>Januari 2024</h4>
-                    <p>Pertemuan pertama kami di sebuah perpustakaan kota.</p>
+                    <span style="font-weight:600; color:var(--accent-color); font-size: 0.85rem;">JANUARI 2024</span>
+                    <h4>Pertemuan Pertama</h4>
+                    <p>Momen tak terlupakan saat pertama kali kita bertemu dan mengenal satu sama lain.</p>
                 </div>
                 <div class="timeline-item">
-                    <h4>Desember 2026</h4>
-                    <p>Hari ini kami memutuskan untuk melangkah ke jenjang yang lebih serius.</p>
+                    <span style="font-weight:600; color:var(--accent-color); font-size: 0.85rem;">DESEMBER 2026</span>
+                    <h4>Lamaran</h4>
+                    <p>Hari ini, kami mengikat janji untuk melangkah ke jenjang yang lebih serius.</p>
                 </div>
             </div>
         </section>
 
-        <section>
-            <h3 style="font-family: var(--font-accent); color: var(--primary-color); font-size: 2.5rem;">Momen Indah</h3>
+        <section id="album">
+            <h3 class="section-title">Momen Indah</h3>
             <div class="gallery-grid">
-                <div class="gallery-item" onclick="openLightbox(this)"><img src="https://picsum.photos/400/600?random=1"></div>
-                <div class="gallery-item" onclick="openLightbox(this)"><img src="https://picsum.photos/400/600?random=2"></div>
-                <div class="gallery-item" onclick="openLightbox(this)"><img src="https://picsum.photos/400/600?random=3"></div>
-                <div class="gallery-item" onclick="openLightbox(this)"><img src="https://picsum.photos/400/600?random=4"></div>
+                <div class="gallery-item" onclick="openLightbox(this)"><img src="https://picsum.photos/600/800?random=11" alt="Momen 1"></div>
+                <div class="gallery-item" onclick="openLightbox(this)"><img src="https://picsum.photos/600/800?random=12" alt="Momen 2"></div>
+                <div class="gallery-item" onclick="openLightbox(this)"><img src="https://picsum.photos/600/800?random=13" alt="Momen 3"></div>
+                <div class="gallery-item" onclick="openLightbox(this)"><img src="https://picsum.photos/600/800?random=14" alt="Momen 4"></div>
             </div>
         </section>
 
-        <section id="guestbook" style="background: var(--bg-color);">
-            <h3 style="font-family: var(--font-accent); color: var(--primary-color); font-size: 2.5rem;">Buku Tamu</h3>
-            <form id="guestbook-form" style="max-width: 500px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 15px; border: 1px solid var(--primary-color);">
+        <section style="background-color: var(--bg-color);">
+            <h3 class="section-title">Acara Lamaran</h3>
+            <p style="margin-bottom: 1.5rem; line-height: 1.6; font-weight: 300;">
+                <strong>Pukul 09.00 WIB - Selesai</strong><br>
+                Kediaman Mempelai Wanita<br>
+                Jl. Kenangan No. 1, Jakarta
+            </p>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126920.24009761376!2d106.75874836706915!3d-6.229746487103328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e945e34b9d%3A0x5371bf0fdad786a2!2sJakarta%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" style="width:100%; height:250px; border-radius:15px; border:2px solid var(--accent-color);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <a href="#" class="btn-action">📍 Navigasi Google Maps</a>
+        </section>
+
+        <section id="guestbook">
+            <h3 class="section-title">Buku Tamu</h3>
+            <p style="font-weight: 300; margin-bottom: 2rem;">Berikan doa dan ucapan terbaik Anda.</p>
+            
+            <form id="guestbook-form" style="max-width: 500px; margin: 0 auto 3rem auto; background: var(--bg-color); padding: 2rem; border-radius: 15px; border: 1px solid var(--envelope-bg);">
                 <div class="form-group">
                     <label>Nama Anda</label>
-                    <input type="text" id="name" required>
+                    <input type="text" id="name" required placeholder="Masukkan nama">
                 </div>
                 <div class="form-group">
                     <label>Pesan & Doa</label>
-                    <textarea id="message" rows="4" required></textarea>
+                    <textarea id="message" rows="4" required placeholder="Tulis doa restu Anda..."></textarea>
                 </div>
                 <button type="submit" class="btn-action" style="width: 100%;">Kirim Ucapan</button>
             </form>
-            <div id="messages-container" style="max-width: 500px; margin: 0 auto; max-height: 400px; overflow-y: auto;">
-                <p id="loading-text">Memuat ucapan...</p>
+
+            <div id="messages-container" style="max-width: 500px; margin: 0 auto; height: 400px; overflow-y: auto; padding-right: 10px;">
+                <p id="loading-text" style="color: #888; font-style: italic;">Memuat daftar ucapan...</p>
             </div>
         </section>
         
-        <footer style="padding: 3rem; background: var(--primary-color); color: white;">
-            <h1 style="color: white; font-size: 3rem;">Romeo & Juliet</h1>
+        <footer style="padding: 4rem 2rem; background: var(--primary-color); color: white;">
+            <h1 style="color: white; font-size: 3.5rem; margin: 0;">Romeo & Juliet</h1>
+            <p style="font-weight: 300; margin-top: 1rem;">Terima kasih atas doa restu Anda.</p>
         </footer>
     </div>
 
     <script>
-        // --- KONFIGURASI ---
+        // --- 1. KONFIGURASI GOOGLE SHEETS API ---
+        // GANTI TEXT DI BAWAH INI DENGAN URL APPS SCRIPT ANDA
         const scriptURL = 'GANTI_DENGAN_URL_APPS_SCRIPT_ANDA'; 
+        // ----------------------------------------------------
 
-        // URL Parameter
+        // --- 2. LOGIKA URL PARAMETER (NAMA TAMU) ---
         const urlParams = new URLSearchParams(window.location.search);
         const to = urlParams.get('to') || urlParams.get('nama');
         if (to) {
@@ -202,13 +281,16 @@
             document.getElementById('name').value = to;
         }
 
-        // Buka Amplop
+        // --- 3. LOGIKA BUKA AMPLOP 3D ---
         function openInvite() {
             document.getElementById('envelope').classList.add('open');
             document.getElementById('guest-info').style.opacity = '0';
             document.getElementById('open-button').style.opacity = '0';
             document.getElementById('bg-music').play().catch(() => {});
+            
+            // Langsung ambil data buku tamu saat undangan mulai dibuka
             loadMessages();
+            
             setTimeout(() => {
                 document.getElementById('envelope-wrapper').classList.add('hidden');
                 document.getElementById('main-content').classList.add('visible');
@@ -216,12 +298,12 @@
                 document.getElementById('music-btn').style.display = 'flex';
                 document.getElementById('leaves-container').style.display = 'block';
                 setInterval(createLeaf, 350);
-            }, 2000);
+            }, 2500); // Sinkron dengan durasi animasi surat naik
         }
         document.getElementById('envelope').onclick = openInvite;
         document.getElementById('open-button').onclick = openInvite;
 
-        // Countdown
+        // --- 4. LOGIKA HITUNG MUNDUR ---
         const targetDate = new Date("Dec 20, 2026 09:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
@@ -233,54 +315,93 @@
             document.getElementById("seconds").innerText = Math.floor((dist % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }, 1000);
 
-        // Lightbox
+        // --- 5. LOGIKA ALBUM LIGHTBOX ---
         function openLightbox(el) {
             document.getElementById('lightbox-img').src = el.querySelector('img').src;
             document.getElementById('lightbox').style.display = 'flex';
         }
 
-        // Daun
+        // --- 6. LOGIKA DAUN JATUH ---
         function createLeaf() {
             const leaf = document.createElement('div');
             leaf.className = 'leaf';
             leaf.style.left = Math.random() * 100 + 'vw';
-            leaf.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            leaf.style.animationDuration = (Math.random() * 5 + 7) + 's';
             document.getElementById('leaves-container').appendChild(leaf);
-            setTimeout(() => leaf.remove(), 10000);
+            setTimeout(() => leaf.remove(), 12000);
         }
 
-        // Real-time Guestbook
+        // --- 7. LOGIKA MUSIK ---
+        document.getElementById('music-btn').onclick = function() {
+            const m = document.getElementById('bg-music');
+            if (m.paused) { m.play(); this.classList.add('spin'); this.style.opacity = '1'; }
+            else { m.pause(); this.classList.remove('spin'); this.style.opacity = '0.5'; }
+        };
+
+        // --- 8. LOGIKA BUKU TAMU (MENGAMBIL DATA) ---
         function loadMessages() {
-            fetch(scriptURL).then(res => res.json()).then(data => {
-                const container = document.getElementById('messages-container');
-                container.innerHTML = '';
-                data.reverse().forEach(item => {
-                    if(item.nama && item.pesan) {
-                        container.innerHTML += `<div class="message-card"><h4>${item.nama}</h4><p>${item.pesan}</p></div>`;
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('messages-container');
+                    container.innerHTML = ''; 
+                    
+                    data.reverse().forEach(item => {
+                        if(item.nama && item.pesan) {
+                            let timeString = item.waktu ? new Date(item.waktu).toLocaleDateString('id-ID') : '';
+                            container.innerHTML += `
+                                <div class="message-card">
+                                    <h4>${item.nama}</h4>
+                                    <p>"${item.pesan}"</p>
+                                    <small>${timeString}</small>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    if(data.length === 0) {
+                        container.innerHTML = '<p style="color: #888;">Belum ada ucapan. Jadilah yang pertama!</p>';
                     }
+                })
+                .catch(error => {
+                    document.getElementById('loading-text').innerText = "Gagal memuat ucapan.";
+                    console.error("Fetch Error:", error);
                 });
-            }).catch(() => { document.getElementById('loading-text').innerText = "Belum ada ucapan."; });
         }
 
+        // --- 9. LOGIKA BUKU TAMU (MENGIRIM DATA) ---
         document.getElementById('guestbook-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = this.querySelector('button');
-            btn.innerText = "Mengirim..."; btn.disabled = true;
+            const originalText = btn.innerText;
+            
+            btn.innerText = "Mengirim...";
+            btn.disabled = true;
+
             fetch(scriptURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ nama: document.getElementById('name').value, pesan: document.getElementById('message').value })
+                body: JSON.stringify({
+                    nama: document.getElementById('name').value,
+                    pesan: document.getElementById('message').value
+                })
             })
-            .then(() => {
-                alert("Terkirim!"); this.reset(); btn.innerText = "Kirim Ucapan"; btn.disabled = false; loadMessages();
-            }).catch(() => { alert("Gagal!"); btn.disabled = false; });
+            .then(res => res.json())
+            .then(res => {
+                alert("Terima kasih! Pesan Anda telah tersimpan.");
+                this.reset();
+                btn.innerText = originalText;
+                btn.disabled = false;
+                
+                document.getElementById('messages-container').innerHTML = '<p style="color: #888; font-style: italic;">Memperbarui daftar ucapan...</p>';
+                loadMessages();
+            })
+            .catch(err => {
+                alert("Gagal mengirim pesan. Silakan coba lagi.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            });
         });
-        
-        document.getElementById('music-btn').onclick = function() {
-            const m = document.getElementById('bg-music');
-            if (m.paused) { m.play(); this.classList.add('spin'); }
-            else { m.pause(); this.classList.remove('spin'); }
-        };
     </script>
 </body>
 </html>
