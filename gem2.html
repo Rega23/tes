@@ -420,7 +420,7 @@
         e.preventDefault();
             // --- LOGIKA MENGAMBIL PESAN DARI GOOGLE SHEETS ---
 // Ganti dengan URL script Anda yang sama dengan URL form submit
-const scriptURLGet = 'https://script.google.com/macros/s/AKfycbzwEq7Kc818tMBK_fCVz5GDjXV0r25nh01OgstluGYdxIaddV1oHrR4kr_uuiuVuMX-/exec';
+const scriptURLGet = 'https://script.google.com/macros/s/AKfycbw4cmrgOImlfwQN8fvdYOISjEWg5aQOvOHYKaOi73c6K6BLdCTD07FWM6fOPpbZ7mvA/exec';
 
 function loadMessages() {
     const list = document.getElementById('messages-list');
@@ -500,7 +500,7 @@ function openEnvelope() {
         const pesan = document.getElementById('message').value;
 
     // Ganti URL di bawah dengan URL dari Google Apps Script Anda!
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzwEq7Kc818tMBK_fCVz5GDjXV0r25nh01OgstluGYdxIaddV1oHrR4kr_uuiuVuMX-/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw4cmrgOImlfwQN8fvdYOISjEWg5aQOvOHYKaOi73c6K6BLdCTD07FWM6fOPpbZ7mvA/exec';
 
     fetch(scriptURL, {
         method: 'POST',
