@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Lamaran: Romeo & Juliet</title>
+    
+    <meta property="og:title" content="Undangan Lamaran: Romeo & Juliet">
+    <meta property="og:description" content="Minggu, 20 Desember 2026. Kami memohon doa dan restu Anda.">
+    <meta property="og:image" content="https://picsum.photos/800/800?random=1">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #A67C7C; --bg-color: #FFF9F9; --text-color: #4A4A4A;
+            --accent-color: #C5A059; --envelope-bg: #D49068; --envelope-dark: #B57450;
+            --stitch-color: #FFEB3B; --heart-red: #D32F2F; --white: #ffffff;
+            --font-body: 'Poppins', sans-serif; --font-accent: 'Great Vibes', cursive;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
+        body { background-color: var(--bg-color); color: var(--text-color); overflow: hidden; text-align: center; scroll-behavior: smooth; }
+
+        #leaves-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; display: none; }
+        .leaf { position: absolute; width: 15px; height: 15px; background-color: var(--primary-color); opacity: 0.4; border-radius: 0 50% 50% 50%; transform: rotate(45deg); animation: fall linear infinite; }
+        @keyframes fall { 0% { top: -10%; transform: rotate(0deg); } 100% { top: 110%; transform: rotate(360deg); } }
+
+        .envelope-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(50,50,50,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; transition: opacity 0.8s; }
+        .envelope-wrapper.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .guest-info { margin-bottom: 2rem; color: var(--white); transition: opacity 0.5s; }
+        .guest-info h4 { font-family: var(--font-accent); color: var(--stitch-color); font-size: 2.8rem; font-weight: normal; }
+        
+        .envelope-container { perspective: 1000px; }
+        .envelope { position: relative; width: 300px; height: 200px; transform-style: preserve-3d; cursor: pointer; }
+        .envelope-back { position: absolute; width: 100%; height: 100%; background: var(--envelope-dark); border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .letter { position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px; background: white; border-radius: 5px; display: flex; flex-direction: column; justify-content: center; z-index: 1; transition: 0.8s 0.3s; }
+        .envelope-front { position: absolute; top: 40px; width: 100%; height: 160px; background: var(--envelope-bg); border-radius: 0 0 10px 10px; z-index: 2; border: 3px dashed var(--stitch-color); border-top: none; }
+        .lid { position: absolute; top: 0; width: 100%; height: 120px; background: var(--envelope-bg); border-radius: 10px 10px 50% 50%; z-index: 3; transform-origin: top; transition: 0.8s; border: 3px dashed var(--stitch-color); border-top: none; }
+        .heart-seal { position: absolute; top: 110px; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; z-index: 4; transition: 0.3s; }
+        .heart-seal::before, .heart-seal::after { content: ""; position: absolute; width: 25px; height: 40px; background: var(--heart-red); border-radius: 25px 25px 0 0; }
+        .heart-seal::before { left: 25px; transform: rotate(-45deg); transform-origin: 0 100%; }
+        .heart-seal::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
+
+        .envelope.open .lid { transform: rotateX(180deg); z-index: 0; }
+        .envelope.open .letter { transform: translateY(-100px); }
+        .envelope.open .heart-seal { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+
+        .container { max-width: 800px; margin: 0 auto; background: var(--white); min-height: 100vh; display: none; opacity: 0; transition: 1s; padding-bottom: 50px; }
+        .container.visible { display: block; opacity: 1; }
+        section { padding: 4rem 2rem; border-bottom: 1px dashed var(--accent-color); }
+        h1 { font-family: var(--font-accent); font-size: 4.5rem; color: var(--primary-color); font-weight: normal; }
+        .btn-action { background: var(--accent-color); color: white; padding: 12px 25px; border-radius: 30px; text-decoration: none; display: inline-block; margin-top: 1rem; border: none; font-weight: 600; cursor: pointer; }
+        
+        /* Form & Pesan Buku Tamu */
+        .form-group { text-align: left; margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--primary-color); }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+        
+        .message-card { background: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary-color); box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: left; }
+        .message-card h4 { color: var(--primary-color); margin-bottom: 5px; font-weight: 600; font-size: 1.1rem; }
+        .message-card p { font-size: 0.9rem; font-weight: 300; color: #555; line-height: 1.5; font-style: italic; }
+        .message-card small { font-size: 0.7rem; color: #999; display: block; margin-top: 8px; }
+
+        #music-btn { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--primary-color); border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; z-index: 3000; color: white; }
+        .spin { animation: rotate 3s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="music-btn" class="spin">🎵</div>
+    <div id="leaves-container"></div>
+
+    <div class="envelope-wrapper" id="envelope-wrapper">
+        <div class="guest-info" id="guest-info">
+            <p>Kepada Yth. Bapak/Ibu/Saudara/i</p>
+            <h4 id="guest-name">Tamu Undangan</h4>
+        </div>
+        <div class="envelope-container">
+            <div class="envelope" id="envelope">
+                <div class="envelope-back"></div>
+                <div class="letter"><h3>Romeo & Juliet</h3><p>Engagement Invite</p></div>
+                <div class="envelope-front"></div>
+                <div class="lid"></div>
+                <div class="heart-seal"></div>
+            </div>
+        </div>
+        <button class="btn-action" id="open-button" style="margin-top: 2rem;">Buka Undangan</button>
+    </div>
+
+    <div class="container" id="main-content">
+        <section>
+            <h2>The Engagement Of</h2>
+            <h1>Romeo & Juliet</h1>
+            <p>Minggu, 20 Desember 2026</p>
+        </section>
+
+        <section id="guestbook" style="background: var(--bg-color);">
+            <h3 style="font-family: var(--font-accent); color: var(--primary-color); font-size: 2.8rem; font-weight: normal; margin-bottom: 10px;">Buku Tamu</h3>
+            <p style="font-weight: 300; margin-bottom: 2rem;">Berikan doa dan ucapan terbaik Anda.</p>
+            
+            <form id="guestbook-form" style="max-width: 500px; margin: 0 auto 3rem auto; background: white; padding: 2rem; border-radius: 15px; border: 1px solid var(--primary-color);">
+                <div class="form-group">
+                    <label>Nama Anda</label>
+                    <input type="text" id="name" required placeholder="Masukkan nama">
+                </div>
+                <div class="form-group">
+                    <label>Pesan & Doa</label>
+                    <textarea id="message" rows="4" required placeholder="Tulis doa restu Anda..."></textarea>
+                </div>
+                <button type="submit" class="btn-action" style="width: 100%;">Kirim Ucapan</button>
+            </form>
+
+            <div id="messages-container" style="max-width: 500px; margin: 0 auto; height: 400px; overflow-y: auto; padding-right: 10px;">
+                <p id="loading-text" style="color: #888; font-style: italic;">Memuat daftar ucapan...</p>
+                </div>
+        </section>
+        
+        <footer style="padding: 3rem; background: var(--primary-color); color: white;">
+            <h1 style="color: white; font-size: 3rem;">Romeo & Juliet</h1>
+        </footer>
+    </div>
+
+    <script>
+        // --- MASUKKAN URL APPS SCRIPT ANDA DI SINI ---
+        const scriptURL = 'GANTI_DENGAN_URL_APPS_SCRIPT_ANDA'; 
+        // ---------------------------------------------
+
+        // 1. Logika URL Parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const to = urlParams.get('to') || urlParams.get('nama');
+        if (to) {
+            document.getElementById('guest-name').innerText = to;
+            document.getElementById('name').value = to;
+        }
+
+        // 2. Logika Buka Amplop & Load Data Buku Tamu
+        function openInvite() {
+            document.getElementById('envelope').classList.add('open');
+            document.getElementById('guest-info').style.opacity = '0';
+            document.getElementById('open-button').style.opacity = '0';
+            document.getElementById('bg-music').play().catch(() => {});
+            
+            // Panggil fungsi untuk mengambil daftar pesan dari Google Sheets
+            loadMessages();
+            
+            setTimeout(() => {
+                document.getElementById('envelope-wrapper').classList.add('hidden');
+                document.getElementById('main-content').classList.add('visible');
+                document.body.style.overflow = 'auto';
+                document.getElementById('music-btn').style.display = 'flex';
+                document.getElementById('leaves-container').style.display = 'block';
+                setInterval(createLeaf, 350);
+            }, 2000);
+        }
+        document.getElementById('envelope').onclick = openInvite;
+        document.getElementById('open-button').onclick = openInvite;
+
+        function createLeaf() {
+            const leaf = document.createElement('div');
+            leaf.className = 'leaf';
+            leaf.style.left = Math.random() * 100 + 'vw';
+            leaf.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            document.getElementById('leaves-container').appendChild(leaf);
+            setTimeout(() => leaf.remove(), 10000);
+        }
+
+        // 3. Fungsi MENGAMBIL Data dari Google Sheets (Baru!)
+        function loadMessages() {
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('messages-container');
+                    container.innerHTML = ''; // Hapus tulisan loading
+                    
+                    // Membalik urutan agar pesan terbaru ada di atas
+                    data.reverse().forEach(item => {
+                        if(item.nama && item.pesan) {
+                            // Mengubah format waktu (opsional)
+                            let timeString = item.waktu ? new Date(item.waktu).toLocaleDateString('id-ID') : '';
+                            
+                            container.innerHTML += `
+                                <div class="message-card">
+                                    <h4>${item.nama}</h4>
+                                    <p>"${item.pesan}"</p>
+                                    <small>${timeString}</small>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    if(data.length === 0) {
+                        container.innerHTML = '<p style="color: #888;">Belum ada ucapan. Jadilah yang pertama!</p>';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loading-text').innerText = "Gagal memuat ucapan.";
+                    console.error("Error fetching messages:", error);
+                });
+        }
+
+        // 4. Fungsi MENGIRIM Data ke Google Sheets
+        document.getElementById('guestbook-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "Mengirim...";
+            btn.disabled = true;
+
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    nama: document.getElementById('name').value,
+                    pesan: document.getElementById('message').value
+                })
+            })
+            .then(res => res.json())
+            .then(res => {
+                alert("Terima kasih! Pesan Anda telah tersimpan.");
+                this.reset();
+                btn.innerText = originalText;
+                btn.disabled = false;
+                
+                // Jika sukses kirim, muat ulang daftar pesan agar pesan barunya langsung muncul!
+                document.getElementById('messages-container').innerHTML = '<p style="color: #888; font-style: italic;">Memperbarui daftar ucapan...</p>';
+                loadMessages();
+            })
+            .catch(err => {
+                alert("Gagal mengirim pesan. Silakan coba lagi.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
