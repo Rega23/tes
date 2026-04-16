@@ -22,6 +22,32 @@
             --text-color: #4A4A4A;     /* Charcoal Gray */
             --accent-color: #C5A059;    /* Muted Gold */
             --white: #ffffff;
+        /* --- Tampilan List Pesan --- */
+.message-card {
+    background: var(--white);
+    padding: 1.2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border-left: 4px solid var(--accent-color);
+    animation: fadeIn 0.5s ease;
+}
+.message-card h5 {
+    color: var(--primary-color);
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+.message-card p {
+    font-size: 0.85rem;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Scrollbar kustom untuk area pesan */
+#guestbook-messages::-webkit-scrollbar { width: 6px; }
+#guestbook-messages::-webkit-scrollbar-track { background: var(--bg-color); }
+#guestbook-messages::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
             
             /* Warna Amplop Kraft (Inspirasi Gambar) */
             --envelope-bg: #D49068;    /* Cokelat Kraft Terang */
@@ -283,8 +309,11 @@
                     <textarea id="message" rows="4" required placeholder="Tulis doa terbaik Anda..."></textarea>
                 </div>
                 <button type="submit" class="btn-action" style="width: 100%;">Kirim Ucapan</button>
-            </form>
-        </section>
+    </form>
+    <div id="guestbook-messages" style="max-width: 500px; margin: 2rem auto 0; max-height: 350px; overflow-y: auto; text-align: left; padding-right: 10px;">
+        <p id="loading-messages" style="text-align: center; color: var(--accent-color); font-size: 0.9rem;">Memuat doa dan ucapan...</p>
+        </div>
+</section>
         
         <footer style="padding: 4rem 2rem; background: var(--primary-color); color: white;">
             <h1 style="color: white; font-size: 3.5rem; margin: 0;">Romeo & Juliet</h1>
@@ -374,32 +403,85 @@
         };
 
        // --- LOGIKA FORM BUKU TAMU TERKONEKSI GOOGLE SHEETS ---
-        document.getElementById('guestbook-form').addEventListener('submit', function(e) {
-        e.preventDefault();
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzwEq7Kc818tMBK_fCVz5GDjXV0r25nh01OgstluGYdxIaddV1oHrR4kr_uuiuVuMX-/exec';
+const messagesContainer = document.getElementById('guestbook-messages');
+
+// 1. Fungsi untuk Mengambil (GET) dan Menampilkan Pesan
+function loadMessages() {
+    fetch(scriptURL)
+    .then(response => response.json())
+    .then(data => {
+        messagesContainer.innerHTML = ''; // Kosongkan tulisan "Memuat..."
+        
+        // Membalik urutan agar pesan terbaru ada di atas
+        data.reverse().forEach(item => {
+            // Pastikan data tidak kosong
+            if(item.nama && item.pesan) {
+                const messageEl = document.createElement('div');
+                messageEl.className = 'message-card';
+                messageEl.innerHTML = `
+                    <h5>${escapeHTML(item.nama)}</h5>
+                    <p>${escapeHTML(item.pesan)}</p>
+                `;
+                messagesContainer.appendChild(messageEl);
+            }
+        });
+
+        if(data.length === 0) {
+            messagesContainer.innerHTML = '<p style="text-align:center; color:#999;">Belum ada ucapan. Jadilah yang pertama!</p>';
+        }
+    })
+    .catch(error => {
+        messagesContainer.innerHTML = '<p style="text-align:center; color:red;">Gagal memuat ucapan.</p>';
+    });
+}
+
+// Fungsi sederhana untuk mencegah serangan XSS dari input user
+function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        }[tag] || tag)
+    );
+}
+
+// Panggil fungsi muat pesan saat halaman selesai dimuat
+window.addEventListener('DOMContentLoaded', loadMessages);
+
+// 2. Fungsi untuk Mengirim (POST) Pesan
+document.getElementById('guestbook-form').addEventListener('submit', function(e) {
+    e.preventDefault();
     
-    // Mengubah teks tombol agar tamu tahu sedang proses loading
-        const btn = this.querySelector('button[type="submit"]');
-        const originalText = btn.innerText;
-        btn.innerText = "Mengirim...";
-        btn.disabled = true;
+    const btn = this.querySelector('button[type="submit"]');
+    const originalText = btn.innerText;
+    btn.innerText = "Mengirim...";
+    btn.disabled = true;
 
-    // Mengambil data dari form
-        const nama = document.getElementById('name').value;
-        const pesan = document.getElementById('message').value;
-
-    // Ganti URL di bawah dengan URL dari Google Apps Script Anda!
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzwEq7Kc818tMBK_fCVz5GDjXV0r25nh01OgstluGYdxIaddV1oHrR4kr_uuiuVuMX-/exec';
+    const nama = document.getElementById('name').value;
+    const pesan = document.getElementById('message').value;
 
     fetch(scriptURL, {
         method: 'POST',
-        // Menggunakan text/plain agar tidak diblokir oleh sistem keamanan browser (CORS)
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ nama: nama, pesan: pesan })
     })
     .then(response => response.json())
     .then(data => {
+        // Tampilkan pesan sukses secara visual (opsional, mengganti alert)
         alert(`Terima kasih ${nama}! Doa restu Anda telah kami terima.`);
-        this.reset(); // Kosongkan form setelah sukses
+        
+        // Buat elemen pesan baru dan letakkan di paling atas (optimistic update)
+        const newMessageEl = document.createElement('div');
+        newMessageEl.className = 'message-card';
+        newMessageEl.innerHTML = `<h5>${escapeHTML(nama)}</h5><p>${escapeHTML(pesan)}</p>`;
+        
+        // Hapus teks kosong jika ini pesan pertama
+        if (messagesContainer.querySelector('p')) {
+            messagesContainer.innerHTML = '';
+        }
+        messagesContainer.prepend(newMessageEl);
+
+        this.reset();
         btn.innerText = originalText;
         btn.disabled = false;
     })
