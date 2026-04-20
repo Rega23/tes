@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Undangan Lamaran Alya & Mulyana</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            max-width: 700px; 
+            margin: auto; 
+            background-color: #f4f4f9;
+        }
+        h2 { color: #333; text-align: center; }
+        .instruction { font-size: 14px; color: #555; margin-bottom: 10px; }
+        textarea { 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        button.generate-btn { 
+            padding: 12px 20px; 
+            margin-top: 15px; 
+            cursor: pointer; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button.generate-btn:hover { background-color: #45a049; }
+        .output-box { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin-top: 20px; 
+            white-space: pre-wrap; 
+            background-color: #ffffff; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .copy-btn { 
+            padding: 8px 15px; 
+            margin-top: 15px; 
+            cursor: pointer; 
+            background-color: #008CBA; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+        }
+        .copy-btn:hover { background-color: #007bb5; }
+    </style>
+</head>
+<body>
+
+    <h2>Generator Pesan Undangan WhatsApp</h2>
+    <p class="instruction">Masukkan nama tamu undangan di bawah ini. Tekan <b>Enter</b> untuk memisahkan setiap nama (satu baris, satu nama).</p>
+    
+    <textarea id="guestNames" rows="6" placeholder="Contoh:&#10;Bapak Budi Santoso&#10;Alya Dan Partner&#10;Keluarga Bapak Andi"></textarea>
+    
+    <button class="generate-btn" onclick="generateLinks()">Buat Pesan Undangan</button>
+
+    <div id="outputContainer"></div>
+
+    <script>
+    function generateLinks() {
+        const input = document.getElementById('guestNames').value;
+        // Memisahkan nama berdasarkan baris baru atau koma
+        const names = input.split('\n').map(name => name.trim()).filter(name => name !== '');
+        const outputContainer = document.getElementById('outputContainer');
+        outputContainer.innerHTML = '';
+
+        if(names.length === 0) {
+            alert("Silakan masukkan minimal satu nama tamu terlebih dahulu.");
+            return;
+        }
+
+        names.forEach(name => {
+            // Encode nama untuk URL dan ubah spasi menjadi tanda +
+            const encodedName = encodeURIComponent(name).replace(/%20/g, '+');
+            
+            // Template pesan undangan
+            const message = `Yth. Bapak/Ibu/Saudara/i
+${name}
+Di Tempat
+-----------
+Dengan segala kerendahan hati , kami mengundang Bapak/Ibu/Saudara/i dan teman-teman untuk menghadiri acara,
+===========
+The Engagement Of Alya & Mulyana
+===========
+Pada: Intimate Engagement
+🗓️ Tanggal: 27-04-2026
+🕛 Pukul: 09:00 - Selesai
+📍 Lokasi: Kp. Nyalindung Rt04/08 Desa Sukamantri Kecamatan Tamansari Kabupaten Bogor
+
+Link undangan bisa diakses lengkap di:
+https://lamaran.alya-muy.my.id/?to=${encodedName}
+
+Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir di acara kami
+Mohon maaf perihal undangan hanya di bagikan melalui pesan ini
+Terima kasih banyak atas perhatiannya
+
+Note:
+Untuk mendapatkan hasil yg bagus, harap buka melalui google chrome terupdate dan matikan mode gelap dari hp`;
+
+            // Membuat kotak hasil untuk setiap nama
+            const box = document.createElement('div');
+            box.className = 'output-box';
+            box.innerText = message;
+            
+            // Membuat tombol Copy
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-btn';
+            copyBtn.innerText = 'Copy Pesan';
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(message);
+                copyBtn.innerText = 'Tersalin!';
+                copyBtn.style.backgroundColor = '#4CAF50';
+                setTimeout(() => {
+                    copyBtn.innerText = 'Copy Pesan';
+                    copyBtn.style.backgroundColor = '#008CBA';
+                }, 2000);
+            };
+
+            box.appendChild(document.createElement('br'));
+            box.appendChild(copyBtn);
+            outputContainer.appendChild(box);
+        });
+    }
+    </script>
+
+</body>
+</html>
